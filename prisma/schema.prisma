@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  password     String
+  role         String        @default("USER")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  campaigns    campaign[]
+  donations    donations[]
+  comment      comment[]
+  bookmark     bookmark[]
+}
+
+model campaign {
+  id             Int              @id @default(autoincrement())
+  title          String
+  description    String
+  goal           Int
+  currentDonation Int
+  endDate        DateTime
+  user           users            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId         Int
+  categories     campaign_categories[]
+  donations      donations[]
+  comment        comment[] 
+  banner         banner[]
+  bookmark       bookmark[]  
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model categories  {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String
+  campaigns    campaign_categories[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model campaign_categories {
+  campaign_id Int
+  category_id Int
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  campaigns   campaign   @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([campaign_id, category_id])
+}
+
+model donations {
+  id           Int           @id @default(autoincrement())
+  amount       Int
+  user         users         @relation(fields: [userId], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  userId       Int
+  campaign     campaign      @relation(fields: [campaignId], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  campaignId   Int
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model comment {
+  id          Int       @id @default(autoincrement())
+  content     String
+  user        users     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      Int
+  campaign    campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  campaignId  Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model banner {
+  id          Int      @id @default(autoincrement())
+  image       String
+  campaign    campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  campaignId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model bookmark {
+  id          Int      @id @default(autoincrement())
+  user        users    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      Int
+  campaign    campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  campaignId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
