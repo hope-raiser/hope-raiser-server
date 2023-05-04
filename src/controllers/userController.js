@@ -30,7 +30,7 @@ class UserController {
             if (!passwordMatch) {
                 return next({ name: "WrongPassword" });
             }
-            const token = jwt.sign({ usersId: data.id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: data.id, email: data.email }, process.env.JWT_SECRET);
             return res.status(200).json({ token });
         } catch (err) {
             next(err);
