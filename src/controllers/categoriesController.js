@@ -6,7 +6,6 @@ class CategoriesController {
        
         try {
             const categories = await prisma.categories.findMany()
-            // const data = await Categories.findCategories(next);
             res.status(200).json(categories);
         } catch (err) {
             next(err);
@@ -50,7 +49,7 @@ class CategoriesController {
             const {id} = req.params;
             const {name, description} = req.body
             const categories = await prisma.categories.update({
-                where: {id: Number(id)},
+                where: {id: +id},
                 data: {
                     name,
                     description

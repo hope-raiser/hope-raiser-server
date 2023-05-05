@@ -12,9 +12,14 @@ function errorHandler(err, req, res, next){
             message: "wrong Password Or Email"
         })   
     }
-    else if (err.name === "UserAlreadyExists"){
+    else if (err.name === "AlreadyExists"){
         res.status(400).json({
-            message: "User Already Exists"
+            message: "Already Exists"
+        })   
+    }
+    else if (err.name === "MustAdmin"){
+        res.status(400).json({
+            message: "Must Admin"
         })   
     }
     else if (err.name === "Unauthenticated"){
