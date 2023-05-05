@@ -1,16 +1,15 @@
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../helpers/prisma.js")
 
-function authentication(req, res, next) {
+async function authentication(req, res, next) {
     const { access_token } = req.headers;
 
     if (access_token) {
         try {
             const decode = jwt.verify(access_token, process.env.JWT_SECRET);
             const { id, email } = decode
-            const user = prisma.users.findUnique({ where: { id: Number(id), } })
+            const user = await prisma.users.findUnique({ where: { id: Number(id), } })
             if (!user) {
                 next({ name: "ErrorNotFound" })
             } else {

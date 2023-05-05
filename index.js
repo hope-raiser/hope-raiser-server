@@ -2,7 +2,6 @@ const express = require('express');
 const app = express()
 const port = 3001
 const router = require("./src/routes/index.js")
-const pool = require("./src/config/config.js")
 const errorHandler = require("./src/middlewares/errorhandler.js")
 
 app.use(express.json());
