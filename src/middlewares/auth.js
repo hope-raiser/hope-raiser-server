@@ -9,7 +9,7 @@ async function authentication(req, res, next) {
         try {
             const decode = jwt.verify(access_token, process.env.JWT_SECRET);
             const { id, email } = decode
-            const user = await prisma.users.findUnique({ where: { id: Number(id), } })
+            const user = await prisma.users.findUnique({ where: { id: +id, } })
             if (!user) {
                 next({ name: "ErrorNotFound" })
             } else {
@@ -29,18 +29,38 @@ async function authentication(req, res, next) {
     }
 }
 
-// function authorization(req, res, next) {
-//     const { role, email, id } = req.loggedUser;
+async function authorization(req, res, next) {
+    const { role, email, id } = req.loggedUser;
+    const campaignId = req.params.id;
 
-//     if (role === "admin") {
+    const campaign = await prisma.campaign.findUnique({where: {id: +campaignId}})
+    console.log(campaign)
+    if(campaign){
+        if ( id === campaign.userId ) {
 
-//         next();
-//     } else {
-//         next({ name: "Unauthorized" })
-//     }
-// }
+            next();
+        } else {
+            next({ name: "Unauthorized" })
+        }
+    }else {
+        next({ name: "ErrorNotFound" })
+    }
+}
+
+async function adminAuthorization(req, res, next) {
+    const { role, email, id } = req.loggedUser;
+   
+        if ( role.toLowerCase === "admin" ) {
+
+            next();
+        } else {
+            next({ name: "MustAdmin" })
+        }
+}
+
 
 module.exports = {
-    authentication
-    // authorization
+    authentication,
+    authorization,
+    adminAuthorization
 }

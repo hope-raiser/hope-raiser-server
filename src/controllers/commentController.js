@@ -52,8 +52,7 @@ class CommentController {
             const comment = await prisma.comment.update({
                 where: { id: +id },
                 data: {
-                    content,
-                    userId: req.loggedUser.id
+                    content
                 }
             })
             res.status(200).json({comment})

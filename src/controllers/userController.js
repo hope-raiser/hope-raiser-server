@@ -6,14 +6,13 @@ class UserController {
 
     static registerUser = async (req, res, next) => {
         try {
-            const {name, email, password, role} = req.body
+            const {name, email, password} = req.body
             const hashedPassword = await bcrypt.hash(password, 10);
             const user = await prisma.users.create({
                 data: {
                     name,
                     email,
-                    password: hashedPassword,
-                    role
+                    password: hashedPassword
                 }
             })
             res.status(200).json({message: "User Registered Successfully"});
