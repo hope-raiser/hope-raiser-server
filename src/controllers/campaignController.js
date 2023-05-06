@@ -51,7 +51,9 @@ class CampaignController {
 
         try {
             const { id } = req.params;
-            const data = await Campaign.findCampaignById(id, next);
+            const data = await prisma.campaign.findUnique({
+                where: {id: +id}
+            })
             if (data) {
                 res.status(200).json(data);
             } else {

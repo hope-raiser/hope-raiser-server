@@ -5,8 +5,7 @@ class DonationController {
     static findDonation = async (req, res, next) => {
        
         try {
-            const donation = await prisma.donation.findMany()
-            
+            const donation = await prisma.donations.findMany()
             res.status(200).json(donation);
         } catch (err) {
             next(err);
@@ -17,7 +16,7 @@ class DonationController {
     
         try {
             const {id} = req.params;
-            const donation = await prisma.donation.findUnique({where: {id: +id}})
+            const donation = await prisma.donations.findUnique({where: {id: +id}})
             if(donation) {
                 res.status(200).json(donation);
             } else {
@@ -57,7 +56,7 @@ class DonationController {
         try {
             const {id} = req.params;
             const {content} = req.body
-            const donation = await prisma.donation.update({
+            const donation = await prisma.donations.update({
                 where: { id: +id },
                 data: {
                     content
@@ -72,7 +71,7 @@ class DonationController {
     static deleteDonation = async (req, res, next) => {
         try {
             const {id} = req.params;
-            const donation = await prisma.donation.delete({
+            const donation = await prisma.donations.delete({
                 where: { id: +id },
             })
             
