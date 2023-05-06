@@ -52,14 +52,17 @@ class DonationController {
 	static updateDonation = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const { content } = req.body;
+			const { amount, campaignId } = req.body;
 			const donation = await prisma.donations.update({
 				where: { id: +id },
 				data: {
-					content
+					amount,
+					userId: req.loggedUser.id,
+					campaignId
 				}
 			});
-			res.status(200).json({ donation });
+
+			res.status(200).json(donation);
 		} catch (err) {
 			next(err);
 		}
@@ -68,14 +71,19 @@ class DonationController {
 	static deleteDonation = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const donation = await prisma.donations.delete({
-				where: { id: +id }
-			});
-
-			if (donation) {
-				res.status(200).json({
-					message: "Donation deleted successfully"
+			const findDonation = await prisma.donations.findUnique({ where: { id: +id } });
+			if (findDonation) {
+				const donation = await prisma.donations.delete({
+					where: { id: +id }
 				});
+
+				if (donation) {
+					res.status(200).json({
+						message: "Donation deleted successfully"
+					});
+				}
+			} else {
+				next({ name: "ErrorNotFound" });
 			}
 		} catch (err) {
 			next(err);
