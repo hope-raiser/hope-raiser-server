@@ -5,16 +5,17 @@ const bcrypt = require("bcrypt");
 class UserController {
 	static registerUser = async (req, res, next) => {
 		try {
-			const { name, email, password } = req.body;
+			const { name, email, password, role } = req.body;
 			const hashedPassword = await bcrypt.hash(password, 10);
 			const user = await prisma.users.create({
 				data: {
 					name,
 					email,
 					password: hashedPassword,
-				},
+					role
+				}
 			});
-			res.status(200).json({ message: "User registered successfully" });
+			res.status(200).json({ message: "User Registered Successfully", data: user });
 		} catch (err) {
 			next({ name: "UsersAlreadyExist" });
 		}
@@ -32,10 +33,7 @@ class UserController {
 			if (!passwordMatch) {
 				return next({ name: "WrongPassword" });
 			}
-			const token = jwt.sign(
-				{ id: user.id, email: user.email },
-				process.env.JWT_SECRET
-			);
+			const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET);
 			return res.status(200).json({ token });
 		} catch (err) {
 			next(err);
@@ -46,38 +44,39 @@ class UserController {
 	static changePassword = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const { password } = req.body;
+			const { password } = req.body;	
 			const hashedPassword = await bcrypt.hash(password, 10);
 			const user = await prisma.users.update({
 				where: { id: +id },
 				data: {
-					password: hashedPassword,
-				},
+					password: hashedPassword
+				}
 			});
-			return res
-				.status(200)
-				.json({ message: "Successfully changed password" });
+			return res.status(200).json({ message: "Successfully Change Password" });
 		} catch (err) {
 			next(err);
-			return res
-				.status(400)
-				.json({ message: "Failed to change password" });
+			return res.status(400).json({ message: "Fail" });
 		}
 	};
 
 	static deleteUser = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const user = await prisma.users.delete({
-				where: { id: +id },
-			});
-			if (user) {
-				res.status(200).json({
-					message: "User deleted successfully",
+			const findUser = await prisma.users.findUnique({ where: { id: +id } });
+			if (findUser) {
+				const user = await prisma.users.delete({
+					where: { id: +id }
 				});
+				if (user) {
+					res.status(200).json({
+						message: "User deleted successfully"
+					});
+				}
+			} else {
+				next({ name: "ErrorNotFound" });
 			}
 		} catch (err) {
-			res.status(400).json({ message: "Failed to delete user" });
+			res.status(400).json({ message: "Fail Delete" });
 		}
 	};
 }
