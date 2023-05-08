@@ -37,7 +37,7 @@ class UserController {
 			return res.status(200).json({ token });
 		} catch (err) {
 			next(err);
-			res.status(400).json({ message: "Invalid credentials" });
+			res.status(401).json({ message: "Invalid credentials" });
 		}
 	};
 
@@ -55,7 +55,7 @@ class UserController {
 			return res.status(200).json({ message: "Successfully Change Password" });
 		} catch (err) {
 			next(err);
-			return res.status(400).json({ message: "Fail" });
+			return res.status(400).json({ message: "Failed Change Password" });
 		}
 	};
 
@@ -76,7 +76,7 @@ class UserController {
 				next({ name: "ErrorNotFound" });
 			}
 		} catch (err) {
-			res.status(400).json({ message: "Fail Delete" });
+			res.status(400).json({ message: "Failed Delete User" });
 		}
 	};
 }

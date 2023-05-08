@@ -6,7 +6,7 @@
 	 "description": "CRUD API Documentation using Postman & Swagger",
     "contact": {}
   },
-  "host": "example.com",
+  "host": "http://localhost:3001",
   "basePath": "/",
   "securityDefinitions": {},
   "schemes": [
@@ -43,7 +43,11 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "User Registered Successfully",
+            "headers": {}
+          },
+          "400": {
+            "description": "Already Exists",
             "headers": {}
           }
         }
@@ -73,13 +77,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "access_token will be here",
+            "headers": {}
+          },
+          "400": {
+            "description": "wrong Password Or Email",
+            "headers": {}
+          },
+          "401": {
+            "description": "Invalid credentials",
             "headers": {}
           }
+         
         }
       }
     },
-    "/user/update/{id}": {
+    "/users/update/{id}": {
       "put": {
         "summary": "Change Password",
         "tags": [
@@ -118,13 +131,17 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Successfully Change Password",
+            "headers": {}
+          },
+          "400": {
+            "description": "Failed Change Password",
             "headers": {}
           }
         }
       }
     },
-    "/user/delete/{id}": {
+    "/users/delete/{id}": {
       "delete": {
         "summary": "Delete User",
         "tags": [
@@ -143,20 +160,19 @@
             "type": "integer",
             "format": "int32",
             "description": ""
-          },
-          {
-            "name": "Body",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/DeleteUserRequest"
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "User deleted successfully",
+            "headers": {}
+          },
+          "400": {
+            "description": "Failed Delete User",
+            "headers": {}
+          },
+          "404": {
+            "description": "Error Not Found",
             "headers": {}
           }
         }
@@ -200,7 +216,7 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Result List Campaign , Current Page, Total Page",
             "headers": {}
           }
         }
@@ -282,7 +298,7 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Data Created Campaign",
             "headers": {}
           }
         }
@@ -320,6 +336,10 @@
           "200": {
             "description": "",
             "headers": {}
+          },
+          "400": {
+            "description": "Error Not Found",
+            "headers": {}
           }
         }
       },
@@ -348,20 +368,15 @@
             "required": true,
             "type": "string",
             "description": ""
-          },
-          {
-            "name": "Body",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/DeleteCampaignRequest"
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Campaign deleted successfully",
+            "headers": {}
+          },
+          "404": {
+            "description": "Error Not Found",
             "headers": {}
           }
         }
@@ -469,7 +484,7 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Data Created Category",
             "headers": {}
           }
         }
@@ -582,7 +597,11 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Categories deleted successfully",
+            "headers": {}
+          },
+          "403": {
+            "description": "Must Admin",
             "headers": {}
           }
         }
@@ -734,11 +753,6 @@
         "tags": [
           "Comment"
         ],
-        "operationId": "DeleteComment",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -754,20 +768,15 @@
             "required": true,
             "type": "string",
             "description": ""
-          },
-          {
-            "name": "Body",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/DeleteCommentRequest"
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Comment deleted successfully",
+            "headers": {}
+          },
+          "404": {
+            "description": "Error Not Found",
             "headers": {}
           }
         }
@@ -830,7 +839,11 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Data Bookmark",
+            "headers": {}
+          },
+          "400": {
+            "description": "Already Exists",
             "headers": {}
           }
         }
@@ -900,7 +913,11 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Bookmark deleted successfully",
+            "headers": {}
+          },
+          "404": {
+            "description": "Error Not Found",
             "headers": {}
           }
         }
@@ -1076,7 +1093,11 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Donation deleted successfully",
+            "headers": {}
+          },
+          "404": {
+            "description": "Error Not Found",
             "headers": {}
           }
         }
@@ -1163,7 +1184,7 @@
       "title": "UpdateCampaignRequest",
       "example": {
         "title": "TestUpdate",
-        "description": "Ini Update Euy",
+        "description": "Test Update Campaign",
         "goal": 2500000,
         "currentDonation": 50000,
         "endDate": "2020-04-12 12:50:04.642"
@@ -1236,8 +1257,8 @@
     "CreateCategoryRequest": {
       "title": "CreateCategoryRequest",
       "example": {
-        "name": "Test",
-        "description": "TEST Test"
+        "name": "Film",
+        "description": "Film Description"
       },
       "type": "object",
       "properties": {

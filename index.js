@@ -6,10 +6,16 @@ const errorHandler = require("./src/middlewares/errorhandler.js");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// API DOCS
+const swaggerUi = require("swagger-ui-express");
+const hopeRaiserDocs = require("./src/docs/ApiDocsHopeRaiser.json");
+app.use("/hoperaiser-docs", swaggerUi.serve, swaggerUi.setup(hopeRaiserDocs));
+app.use("/uploads", express.static("uploads"));
+
+// ROUTER
 app.use(router);
 app.use(errorHandler);
-
-router.use("/uploads", express.static("uploads"));
 
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
