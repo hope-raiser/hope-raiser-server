@@ -3,35 +3,35 @@ function errorHandler(err, req, res, next) {
 
 	if (err.name === "ErrorNotFound") {
 		res.status(404).json({
-			message: "Error Not Found",
+			message: "Error Not Found"
 		});
 	} else if (err.name === "WrongPassword") {
 		res.status(400).json({
-			message: "Wrong Password or Email",
+			message: "wrong Password Or Email"
 		});
 	} else if (err.name === "AlreadyExists") {
 		res.status(400).json({
-			message: "Already Exists",
+			message: "Already Exists"
 		});
 	} else if (err.name === "MustAdmin") {
-		res.status(400).json({
-			message: "Must Admin",
+		res.status(403).json({
+			message: "Must Admin"
 		});
 	} else if (err.name === "Unauthenticated") {
 		res.status(400).json({
-			message: "Unauthenticated",
+			message: "Unauthenticated"
 		});
 	} else if (err.name === "JWTerror") {
 		res.status(400).json({
-			message: "JWT Error",
+			message: "JWT Error"
 		});
 	} else if (err.name === "Unauthorized") {
 		res.status(401).json({
-			message: "Unauthorized",
+			message: "Unauthorized"
 		});
 	} else {
 		res.status(500).json({
-			message: "Internal Server Error",
+			message: "Internal Server Error"
 		});
 	}
 }
