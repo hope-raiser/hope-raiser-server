@@ -1,6 +1,9 @@
 {
   "name": "hope-raiser-server",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "description": "Backend for HopeRaiser using Express.js",
   "main": "index.js",
   "scripts": {
@@ -31,4 +34,5 @@
   "devDependencies": {
     "prisma": "^4.13.0"
   }
+  
 }
