@@ -44,7 +44,7 @@ class UserController {
 	static changePassword = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const { password } = req.body;
+			const { password } = req.body;	
 			const hashedPassword = await bcrypt.hash(password, 10);
 			const user = await prisma.users.update({
 				where: { id: +id },

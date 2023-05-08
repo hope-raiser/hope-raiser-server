@@ -49,6 +49,7 @@ class DonationController {
 		}
 	};
 
+
 	static updateDonation = async (req, res, next) => {
 		try {
 			const { id } = req.params;
@@ -68,6 +69,7 @@ class DonationController {
 		}
 	};
 
+ 
 	static deleteDonation = async (req, res, next) => {
 		try {
 			const { id } = req.params;
