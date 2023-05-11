@@ -1,38 +1,38 @@
 {
-  "name": "hope-raiser-server",
-  "version": "1.0.0",
-  "prisma": {
-    "seed": "node prisma/seed.js"
-  },
-  "description": "Backend for HopeRaiser using Express.js",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon app.js",
-    "seed": "node prisma/seed.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hope-raiser/hope-raiser-server.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hope-raiser/hope-raiser-server/issues"
-  },
-  "homepage": "https://github.com/hope-raiser/hope-raiser-server#readme",
-  "dependencies": {
-    "@prisma/client": "^4.13.0",
-    "bcrypt": "^5.1.0",
-    "cors": "^2.8.5",
-    "date-fns": "^2.29.3",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "multer": "^1.4.5-lts.1",
-    "pg": "^8.10.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.2"
-  },
-  "devDependencies": {
-    "prisma": "^4.13.0"
-  }
+    "name": "hope-raiser-server",
+    "version": "1.0.0",
+    "prisma": {
+        "seed": "node prisma/seed.js"
+    },
+    "description": "Backend for HopeRaiser using Express.js",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon index.js",
+        "seed": "node prisma/seed.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hope-raiser/hope-raiser-server.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/hope-raiser/hope-raiser-server/issues"
+    },
+    "homepage": "https://github.com/hope-raiser/hope-raiser-server#readme",
+    "dependencies": {
+        "@prisma/client": "^4.13.0",
+        "bcrypt": "^5.1.0",
+        "cors": "^2.8.5",
+        "date-fns": "^2.29.3",
+        "express": "^4.18.2",
+        "jsonwebtoken": "^9.0.0",
+        "multer": "^1.4.5-lts.1",
+        "pg": "^8.10.0",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^4.6.2"
+    },
+    "devDependencies": {
+        "prisma": "^4.13.0"
+    }
 }

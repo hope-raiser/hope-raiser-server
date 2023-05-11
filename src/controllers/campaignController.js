@@ -1,128 +1,150 @@
 const prisma = require("../helpers/prisma.js");
+const DEFAULT_PAGE = 1;
+const DEFAULT_LIMIT = 4;
 
 class CampaignController {
-	static findCampaign = async (req, res, next) => {
-		try {
-			const { limit, page, category_id } = req.query;
-			const offset = (+page - 1) * +limit;
+    static findCampaign = async (req, res, next) => {
+        try {
+            let { limit, page, category_id } = req.query;
+            limit = limit ? limit : DEFAULT_LIMIT;
+            page = page ? page : DEFAULT_PAGE;
 
-			let queryFilter = {};
+            const offset = (+page - 1) * +limit;
 
-			if (category_id) {
-				queryFilter = {
-					where: {
-						categories: {
-							every: {
-								category_id: +category_id
-							}
-						}
-					}
-				};
-			}
+            let queryFilter = {};
 
-			const count = await prisma.campaign.count(queryFilter);
-			const data = await prisma.campaign.findMany({
-				take: +limit,
-				skip: offset,
-				...queryFilter,
-				include: {
-					categories: {
-						include: {
-							categories: true
-						}
-					}
-				}
-			});
-			const result = data.map((campaign) => {
-				return { ...campaign, categories: campaign.categories.map((cat) => cat.categories) };
-			});
-			res.status(200).json({
-				data: result,
-				currentPage: +page,
-				totalPages: Math.ceil(count / +limit)
-			});
-		} catch (err) {
-			next(err);
-		}
-	};
+            if (category_id) {
+                queryFilter = {
+                    where: {
+                        categories: {
+                            every: {
+                                category_id: +category_id
+                            }
+                        }
+                    }
+                };
+            }
 
-	static findCampaignById = async (req, res, next) => {
-		try {
-			const { id } = req.params;
-			const data = await prisma.campaign.findUnique({
-				where: { id: +id }
-			});
-			if (data) {
-				res.status(200).json(data);
-			} else {
-				next({ name: "ErrorNotFound" });
-			}
-		} catch (err) {
-			next(err);
-		}
-	};
+            const count = await prisma.campaign.count(queryFilter);
+            const data = await prisma.campaign.findMany({
+                take: +limit,
+                skip: offset,
+                ...queryFilter,
+                include: {
+                    categories: {
+                        include: {
+                            categories: true
+                        }
+                    },
+                    banner: true
+                }
+            });
+            const result = data.map((campaign) => {
+                return {
+                    ...campaign,
+                    categories: campaign.categories.map((cat) => cat.categories)
+                };
+            });
+            res.status(200).json({
+                data: result,
+                currentPage: +page,
+                totalPages: Math.ceil(count / +limit)
+            });
+        } catch (err) {
+            next(err);
+        }
+    };
 
-	static createCampaign = async (req, res, next) => {
-		try {
-			const image = req.file.path;
-			const { title, description, goal, currentDonation, endDate, category_id } = req.body;
-			const campaign = await prisma.campaign.create({
-				data: {
-					title,
-					description,
-					goal: +goal,
-					currentDonation: +currentDonation,
-					endDate: new Date(endDate),
-					userId: +req.loggedUser.id,
-					categories: {
-						create: [{ category_id: +category_id }]
-					},
-					banner: {
-						create: [{ image: image }]
-					}
-				}
-			});
-			res.status(200).json({ campaign });
-		} catch (err) {
-			next(err);
-		}
-	};
+    static findCampaignById = async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const data = await prisma.campaign.findUnique({
+                where: { id: +id },
+                include: {
+                    categories: {
+                        include: {
+                            categories: true
+                        }
+                    },
+                    banner: true
+                }
+            });
+            if (data) {
+                res.status(200).json(data);
+            } else {
+                next({ name: "ErrorNotFound" });
+            }
+        } catch (err) {
+            next(err);
+        }
+    };
 
-	static updateCampaign = async (req, res, next) => {
-		try {
-			const { id } = req.params;
-			const { title, description, goal, endDate } = req.body;
-			const campaign = await prisma.campaign.update({
-				where: { id: +id },
-				data: {
-					title,
-					description,
-					goal,
-					endDate: new Date(endDate)
-				}
-			});
-			res.status(200).json(campaign);
-		} catch (err) {
-			next(err);
-		}
-	};
+    static createCampaign = async (req, res, next) => {
+        try {
+            let { title, description, goal, currentDonation, endDate, category_ids } = req.body;
+            const image = req.file.path;
 
-	static deleteCampaign = async (req, res, next) => {
-		try {
-			const { id } = req.params;
-			const campaign = await prisma.campaign.delete({
-				where: { id: +id }
-			});
+            category_ids = category_ids.map((val) => {
+                return { category_id: +val };
+            });
 
-			if (campaign) {
-				res.status(200).json({
-					message: "Campaign deleted successfully"
-				});
-			}
-		} catch (err) {
-			next(err);
-		}
-	};
+            const campaign = await prisma.campaign.create({
+                data: {
+                    title,
+                    description,
+                    goal: +goal,
+                    currentDonation: +currentDonation,
+                    endDate: new Date(endDate),
+                    userId: +req.loggedUser.id,
+                    categories: {
+                        create: category_ids
+                    },
+                    banner: {
+                        create: [{ image: `http://localhost:3001/${image}` }]
+                    }
+                }
+            });
+            res.status(200).json({ campaign });
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    static updateCampaign = async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const { title, description, goal, endDate } = req.body;
+            const campaign = await prisma.campaign.update({
+                where: { id: +id },
+                data: {
+                    title,
+                    description,
+                    goal,
+                    endDate: new Date(endDate)
+                }
+            });
+            res.status(200).json(campaign);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    static deleteCampaign = async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const campaign = await prisma.campaign.delete({
+                where: { id: +id }
+            });
+
+            if (campaign) {
+                res.status(200).json({
+                    message: "Campaign deleted successfully"
+                });
+            }
+        } catch (err) {
+            next(err);
+        }
+    };
 }
 
 module.exports = CampaignController;
