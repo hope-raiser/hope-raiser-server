@@ -56,7 +56,18 @@ class CampaignController {
 		try {
 			const { id } = req.params;
 			const data = await prisma.campaign.findUnique({
-				where: { id: +id }
+				where: { id: +id },
+				include: {
+					categories: {
+						include: {
+							categories: true
+						}
+					},
+					banner: true,
+					comment: true,
+					donations: true,
+					bookmark: true
+				}
 			});
 			if (data) {
 				res.status(200).json(data);
@@ -71,12 +82,12 @@ class CampaignController {
 	static createCampaign = async (req, res, next) => {
 		try {
 			const image = req.file.path;
-			let { title, description, goal, currentDonation, endDate, category_ids} = req.body;
+			let { title, description, goal, currentDonation, endDate, category_ids } = req.body;
 			category_ids = category_ids.split(',').map((cat_id) => {
 				return {
 					categories: {
 						connect: {
-							id : +cat_id
+							id: +cat_id
 						}
 					}
 				}
@@ -104,41 +115,41 @@ class CampaignController {
 		}
 	};
 
-    static updateCampaign = async (req, res, next) => {
-        try {
-            const { id } = req.params;
-            const { title, description, goal, endDate } = req.body;
-            const campaign = await prisma.campaign.update({
-                where: { id: +id },
-                data: {
-                    title,
-                    description,
-                    goal,
-                    endDate: new Date(endDate)
-                }
-            });
-            res.status(200).json(campaign);
-        } catch (err) {
-            next(err);
-        }
-    };
+	static updateCampaign = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const { title, description, goal, endDate } = req.body;
+			const campaign = await prisma.campaign.update({
+				where: { id: +id },
+				data: {
+					title,
+					description,
+					goal,
+					endDate: new Date(endDate)
+				}
+			});
+			res.status(200).json(campaign);
+		} catch (err) {
+			next(err);
+		}
+	};
 
-    static deleteCampaign = async (req, res, next) => {
-        try {
-            const { id } = req.params;
-            const campaign = await prisma.campaign.delete({
-                where: { id: +id }
-            });
+	static deleteCampaign = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const campaign = await prisma.campaign.delete({
+				where: { id: +id }
+			});
 
-            if (campaign) {
-                res.status(200).json({
-                    message: "Campaign deleted successfully"
-                });
-            }
-        } catch (err) {
-            next(err);
-        }
-    };
+			if (campaign) {
+				res.status(200).json({
+					message: "Campaign deleted successfully"
+				});
+			}
+		} catch (err) {
+			next(err);
+		}
+	};
 }
 
 module.exports = CampaignController;

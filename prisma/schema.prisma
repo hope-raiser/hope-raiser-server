@@ -29,7 +29,7 @@ model campaign {
   id             Int              @id @default(autoincrement())
   title          String
   description    String
-  goal           Int
+  goal           Int              @default(0)
   currentDonation Int
   endDate        DateTime
   user           users            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
