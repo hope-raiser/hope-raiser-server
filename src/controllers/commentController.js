@@ -3,7 +3,20 @@ const prisma = require("../helpers/prisma.js");
 class CommentController {
 	static findComment = async (req, res, next) => {
 		try {
-			const comment = await prisma.comment.findMany();
+			const { campaign_id } = req.query
+			let queryFilter = {};
+
+			if (campaign_id) {
+				queryFilter.where = {
+					campaignId: +campaign_id
+				}
+			}
+			const comment = await prisma.comment.findMany({
+				queryFilter,
+				include: {
+					user: true,
+				}
+			});
 
 			res.status(200).json(comment);
 		} catch (err) {

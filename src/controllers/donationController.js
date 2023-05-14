@@ -3,8 +3,15 @@ const prisma = require("../helpers/prisma.js");
 class DonationController {
 	static findDonation = async (req, res, next) => {
 		try {
-			const donation = await prisma.donations.findMany();
+			const { campaign_id } = req.query
+			let queryFilter = {};
 
+			if (campaign_id) {
+				queryFilter.where = {
+					campaignId: +campaign_id
+				}
+			}
+			const donation = await prisma.donations.findMany(queryFilter);
 			res.status(200).json(donation);
 		} catch (err) {
 			next(err);
@@ -27,7 +34,6 @@ class DonationController {
 
 	static createDonation = async (req, res, next) => {
 		try {
-			// console.log(prisma)
 			const { amount, campaignId } = req.body;
 			const donation = prisma.donations.create({
 				data: {

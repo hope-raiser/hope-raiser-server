@@ -56,7 +56,18 @@ class CampaignController {
 		try {
 			const { id } = req.params;
 			const data = await prisma.campaign.findUnique({
-				where: { id: +id }
+				where: { id: +id },
+				include: {
+					categories: {
+						include: {
+							categories: true
+						}
+					},
+					banner: true,
+					comment: true,
+					donations: true,
+					bookmark: true
+				}
 			});
 			if (data) {
 				res.status(200).json(data);
