@@ -72,9 +72,14 @@ class CampaignController {
 		try {
 			const image = req.file.path;
 			let { title, description, goal, currentDonation, endDate, category_ids} = req.body;
-
-			category_ids = Array.from(category_ids).map((val) => {
-				return {category_id: +val}
+			category_ids = category_ids.split(',').map((cat_id) => {
+				return {
+					categories: {
+						connect: {
+							id : +cat_id
+						}
+					}
+				}
 			});
 
 			const campaign = await prisma.campaign.create({
