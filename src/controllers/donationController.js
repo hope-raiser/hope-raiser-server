@@ -1,22 +1,38 @@
 const prisma = require("../helpers/prisma.js");
+const DEFAULT_LIMIT = 5;
+const DEFAULT_PAGE = 1;
 
 class DonationController {
 	static findDonation = async (req, res, next) => {
 		try {
-			const { campaign_id } = req.query
-			let queryFilter = {
-				include:{
-					user: true
-			}};
+			let { limit, page, campaign_id  } = req.query;
+			limit = limit ? limit : DEFAULT_LIMIT;
+			page = page ? page : DEFAULT_PAGE;
+
+			const offset = (+page - 1) * +limit;
+
+			let queryFilter = {};
 
 			if (campaign_id) {
 				queryFilter.where = {
 					campaignId: +campaign_id
 				}
 			}
-			const donation = await prisma.donations.findMany(queryFilter);
+			const count = await prisma.donations.count(queryFilter);
+			const data = await prisma.donations.findMany({
+				take: +limit,
+				skip: offset,
+				...queryFilter,
+				include: {
+					user: true
+				}
+			});;
 
-			res.status(200).json(donation);
+			res.status(200).json({
+				data,
+				currentPage: +page,
+				totalPages: Math.ceil(count / +limit)
+			});
 		} catch (err) {
 			next(err);
 		}

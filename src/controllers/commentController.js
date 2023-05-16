@@ -1,22 +1,38 @@
 const prisma = require("../helpers/prisma.js");
+const DEFAULT_LIMIT = 5;
+const DEFAULT_PAGE = 1;
 
 class CommentController {
 	static findComment = async (req, res, next) => {
 		try {
-			const { campaign_id } = req.query
-			let queryFilter = {
-				include:{
-					user: true
-			}};
+			let { limit, page, campaign_id  } = req.query;
+			limit = limit ? limit : DEFAULT_LIMIT;
+			page = page ? page : DEFAULT_PAGE;
+
+			const offset = (+page - 1) * +limit;
+
+			let queryFilter = {};
 
 			if (campaign_id) {
 				queryFilter.where = {
 					campaignId: +campaign_id
 				}
 			}
-			const comment = await prisma.comment.findMany(queryFilter);
+			const count = await prisma.comment.count(queryFilter);
+			const data = await prisma.comment.findMany({
+				take: +limit,
+				skip: offset,
+				...queryFilter,
+				include: {
+					user: true
+				}
+			});
 
-			res.status(200).json(comment);
+			res.status(200).json({
+				data,
+				currentPage: +page,
+				totalPages: Math.ceil(count / +limit)
+			});
 		} catch (err) {
 			next(err);
 		}
