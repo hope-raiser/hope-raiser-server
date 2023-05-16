@@ -43,6 +43,22 @@ async function authorization(req, res, next) {
 	}
 }
 
+async function authorizationComment(req, res, next) {
+	const { role, email, id } = req.loggedUser;
+	const commentId = req.params.id;
+
+	const comment = await prisma.comment.findUnique({ where: { id: +commentId } });
+	if (comment) {
+		if (id === comment.userId) {
+			next();
+		} else {
+			next({ name: "Unauthorized" });
+		}
+	} else {
+		next({ name: "ErrorNotFound" });
+	}
+}
+
 async function adminAuthorization(req, res, next) {
 	const { role, email, id } = req.loggedUser;
 
@@ -56,5 +72,6 @@ async function adminAuthorization(req, res, next) {
 module.exports = {
 	authentication,
 	authorization,
-	adminAuthorization
+	adminAuthorization,
+	authorizationComment
 };

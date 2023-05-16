@@ -9,8 +9,8 @@ const donationRouter = require("./donation.js");
 const { authentication } = require("../middlewares/auth.js");
 
 router.use("/users", userRouter);
-router.use(authentication);
 router.use("/campaigns", campaignRouter);
+router.use(authentication);
 router.use("/categories", categoriesRouter);
 router.use("/comments", commentRouter);
 router.use("/bookmarks", bookmarkRouter);
