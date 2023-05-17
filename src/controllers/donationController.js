@@ -58,9 +58,9 @@ class DonationController {
 			const { amount, campaignId } = req.body;
 			const donation = prisma.donations.create({
 				data: {
-					amount,
+					amount : +amount,
 					userId: req.loggedUser.id,
-					campaignId
+					campaignId : +campaignId
 				}
 			});
 			const campaignUpdate = prisma.campaign.update({
