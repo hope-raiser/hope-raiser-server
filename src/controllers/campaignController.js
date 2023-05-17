@@ -68,8 +68,12 @@ class CampaignController {
 							user: true
 						}
 					},
+					donations: {
+						include: {
+							user: true
+						}
+					},
 					banner: true,
-					donations: true,
 					bookmark: true
 				}
 			});
