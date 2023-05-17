@@ -63,8 +63,12 @@ class CampaignController {
 							categories: true
 						}
 					},
+					comment: {
+						include: {
+							user: true
+						}
+					},
 					banner: true,
-					comment: true,
 					donations: true,
 					bookmark: true
 				}
