@@ -6,7 +6,6 @@ const categoriesRouter = require("./categories.js");
 const commentRouter = require("./comment.js");
 const bookmarkRouter = require("./bookmark.js");
 const donationRouter = require("./donation.js");
-const { authentication } = require("../middlewares/auth.js");
 
 router.use("/users", userRouter);
 router.use("/campaigns", campaignRouter);
