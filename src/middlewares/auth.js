@@ -44,7 +44,7 @@ async function authorization(req, res, next) {
 }
 
 async function authorizationComment(req, res, next) {
-	const { role, email, id } = req.loggedUser;
+	const { id } = req.loggedUser;
 	const commentId = req.params.id;
 
 	const comment = await prisma.comment.findUnique({ where: { id: +commentId } });
@@ -60,7 +60,7 @@ async function authorizationComment(req, res, next) {
 }
 
 async function adminAuthorization(req, res, next) {
-	const { role, email, id } = req.loggedUser;
+	const { role } = req.loggedUser;
 
 	if (role.toLowerCase() === "admin") {
 		next();
