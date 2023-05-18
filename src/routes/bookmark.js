@@ -6,6 +6,6 @@ const { authentication } = require("../middlewares/auth.js");
 router.get("/", BookmarkController.findBookmark);
 router.get("/:id", BookmarkController.findBookmarkById)
 router.post("/", authentication, BookmarkController.createBookmark);
-router.delete("/:id", BookmarkController.deleteBookmark);
+router.delete("/:id",authentication, BookmarkController.deleteBookmark);
 
 module.exports = router;
