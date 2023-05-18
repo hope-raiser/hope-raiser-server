@@ -3,7 +3,23 @@ const prisma = require("../helpers/prisma.js");
 class BookmarkController {
 	static findBookmark = async (req, res, next) => {
 		try {
-			const bookmark = await prisma.bookmark.findMany();
+			let { user_id } = req.query;
+			let queryFilter = {
+				include: {
+					campaign: {
+						include: {
+							banner: true
+						}
+					}
+				}
+			}
+
+			if (user_id) {
+				queryFilter.where = {
+					userId: +user_id
+				}
+			}
+			const bookmark = await prisma.bookmark.findMany(queryFilter);
 			res.status(200).json(bookmark);
 		} catch (err) {
 			next(err);
