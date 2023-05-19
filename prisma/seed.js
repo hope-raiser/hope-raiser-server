@@ -8,7 +8,7 @@ const user1 = await prisma.users.create({
     
     data: {
       name: 'Ali Doe',
-      email: 'AliDoe@example.com',
+      email: 'AlieDoe@example.com',
       password: await bcrypt.hash('test123', 10),
       role: 'user'
     }
@@ -42,7 +42,7 @@ const user1 = await prisma.users.create({
 
   const donation1 = await prisma.donations.create({
     data: {
-      amount: 1500,
+      amount: 15000,
       user: {
         connect: { id: user1.id },
       },
