@@ -7,8 +7,8 @@ async function main() {
 const user1 = await prisma.users.create({
     
     data: {
-      name: 'Pacil Doe',
-      email: 'PacilDoe@example.com',
+      name: 'Ali Doe',
+      email: 'AliDoe@example.com',
       password: await bcrypt.hash('test123', 10),
       role: 'user'
     }
@@ -23,7 +23,7 @@ const user1 = await prisma.users.create({
 
   const campaign1 = await prisma.campaign.create({
     data: {
-      title: 'Sewi Network',
+      title: 'Sawi Network',
       description: 'New Network on Cryptocurrency',
       goal: 1000000,
       currentDonation: 0,
@@ -42,7 +42,7 @@ const user1 = await prisma.users.create({
 
   const donation1 = await prisma.donations.create({
     data: {
-      amount: 25000,
+      amount: 1500,
       user: {
         connect: { id: user1.id },
       },
@@ -54,7 +54,7 @@ const user1 = await prisma.users.create({
 
   const comment1 = await prisma.comment.create({
     data: {
-      content: "Mudah-mudahan Loveit",
+      content: "Mudah-mudahan JP",
       user: {
         connect: { id: user1.id },
       },
