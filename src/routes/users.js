@@ -11,6 +11,7 @@ router.put("/change-name/:id", UserController.changeName);
 router.patch("/update-user/:id", UserController.updateUser);
 router.patch("/profile-user", UserController.updateUserProfile);
 router.delete("/delete/:id", UserController.deleteUser);
-router.get("/:id",authentication, UserController.getUserByid);
+// router.get("/:id",authentication, UserController.getUserByid);
+router.get("/me",authentication, UserController.getUserLogin);
 
 module.exports = router;
