@@ -36,7 +36,8 @@ class CampaignController {
 							categories: true
 						}
 					},
-					banner: true
+					banner: true,
+					bookmark: true
 				}
 			});
 			const result = data.map((campaign) => {
