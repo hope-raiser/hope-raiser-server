@@ -4,6 +4,7 @@ const DEFAULT_PAGE = 1;
 
 class CommentController {
 	static findComment = async (req, res, next) => {
+		
 		try {
 			let { limit, page, campaign_id  } = req.query;
 			limit = limit ? limit : DEFAULT_LIMIT;
