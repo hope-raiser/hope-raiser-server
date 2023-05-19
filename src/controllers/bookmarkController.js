@@ -3,7 +3,7 @@ const prisma = require("../helpers/prisma.js");
 class BookmarkController {
 	static findBookmark = async (req, res, next) => {
 		try {
-			let { user_id } = req.query;
+			let { id } = req.loggedUser;
 			let queryFilter = {
 				include: {
 					campaign: {
@@ -14,9 +14,9 @@ class BookmarkController {
 				}
 			}
 
-			if (user_id) {
+			if (id) {
 				queryFilter.where = {
-					userId: +user_id
+					userId: id
 				}
 			}
 			const bookmark = await prisma.bookmark.findMany(queryFilter);
