@@ -215,6 +215,21 @@ class UserController {
       return res.status(400).json({ message: "Failed to update user" });
     }
   };
+
+  static getUserByid = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const user = await prisma.users.findUnique({ where: { id: +id } });
+			if (user) {
+				res.status(200).json(user);
+			} else {
+				next({ name: "ErrorNotFound" });
+			}
+		} catch (err) {
+			next(err);
+		}
+	};
+
 }
 
 module.exports = UserController;
