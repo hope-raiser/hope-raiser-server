@@ -2,6 +2,7 @@ const prisma = require("../helpers/prisma.js");
 
 class CommentController {
 	static findComment = async (req, res, next) => {
+		
 		try {
 			const comment = await prisma.comment.findMany();
 
