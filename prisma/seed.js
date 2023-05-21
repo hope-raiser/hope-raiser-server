@@ -63,7 +63,8 @@ async function main() {
 	const campaign11 = await prisma.campaign.create({
 		data: {
 			title: "Sawi Network",
-			description: "New Network on Cryptocurrency",
+			description:
+				"New Network on Cryptocurrency. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi venenatis lectus id diam scelerisque, at porta urna egestas. Maecenas magna mauris, varius eleifend eros non, varius vehicula felis. Sed iaculis eros pharetra justo viverra, vitae dapibus ante dictum. Praesent tincidunt ante mattis massa aliquam aliquam. Morbi blandit lacus vestibulum lacus tincidunt efficitur. Nullam blandit in ipsum id consectetur. Mauris at mauris ac turpis sodales ultricies vel ut est. Sed ut metus in velit tincidunt congue sit amet et mi.",
 			goal: 1000000,
 			currentDonation: 0,
 			endDate: new Date("2023-08-30"),
