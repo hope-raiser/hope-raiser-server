@@ -1,5 +1,5 @@
 const prisma = require("../helpers/prisma.js");
-const DEFAULT_LIMIT = 5;
+const DEFAULT_LIMIT = 3;
 const DEFAULT_PAGE = 1;
 
 class CampaignController {

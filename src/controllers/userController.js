@@ -12,7 +12,6 @@ class UserController {
           name,
           email,
           password: hashedPassword,
-          role,
         },
       });
       res
@@ -134,56 +133,56 @@ class UserController {
     }
   };
 
-  static changeName = async (req, res, next) => {
+  static updateUser = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const { name } = req.body;
+      const { id } = req.loggedUser
+      const { name, biography } = req.body;
       const updatedUser = await prisma.users.update({
         where: { id: +id },
         data: {
           name: name,
+          biography: biography,
         },
       });
-      return res
-        .status(200)
-        .json({ message: "Successfully changed name", data: updatedUser });
-    } catch (err) {
-      next(err);
-      return res.status(400).json({ message: "Failed to change name" });
-    }
-  };
-
-  static updateUser = async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const { name, password } = req.body;
-
-      // Update the user's name and/or password in the database
-      const updatedFields = {};
-
-      if (name) {
-        updatedFields.name = name;
-      }
-
-      if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        updatedFields.password = hashedPassword;
-      }
-
-      const updatedUser = await prisma.users.update({
-        where: { id: +id },
-        data: updatedFields,
-      });
-
-      return res.status(200).json({
-        message: "Successfully updated user",
-        data: updatedUser,
+      res.status(200).json({
+        message: "Successfully updated profile",
       });
     } catch (err) {
       next(err);
-      return res.status(400).json({ message: "Failed to update user" });
     }
   };
+
+  // static updateUser = async (req, res, next) => {
+  //   try {
+  //     const { id } = req.params;
+  //     const { name, password } = req.body;
+
+  //     // Update the user's name and/or password in the database
+  //     const updatedFields = {};
+
+  //     if (name) {
+  //       updatedFields.name = name;
+  //     }
+
+  //     if (password) {
+  //       const hashedPassword = await bcrypt.hash(password, 10);
+  //       updatedFields.password = hashedPassword;
+  //     }
+
+  //     const updatedUser = await prisma.users.update({
+  //       where: { id: +id },
+  //       data: updatedFields,
+  //     });
+
+  //     return res.status(200).json({
+  //       message: "Successfully updated user",
+  //       data: updatedUser,
+  //     });
+  //   } catch (err) {
+  //     next(err);
+  //     return res.status(400).json({ message: "Failed to update user" });
+  //   }
+  // };
 
   static updateUserProfile = async (req, res, next) => {
     try {
@@ -217,32 +216,41 @@ class UserController {
   };
 
   // static getUserByid = async (req, res, next) => {
-	// 	try {
-	// 		const { id } = req.params;
-	// 		const user = await prisma.users.findUnique({ where: { id: +id } });
-	// 		if (user) {
-	// 			res.status(200).json(user);
-	// 		} else {
-	// 			next({ name: "ErrorNotFound" });
-	// 		}
-	// 	} catch (err) {
-	// 		next(err);
-	// 	}
-	// };
+  // 	try {
+  // 		const { id } = req.params;
+  // 		const user = await prisma.users.findUnique({ where: { id: +id } });
+  // 		if (user) {
+  // 			res.status(200).json(user);
+  // 		} else {
+  // 			next({ name: "ErrorNotFound" });
+  // 		}
+  // 	} catch (err) {
+  // 		next(err);
+  // 	}
+  // };
 
   static getUserLogin = async (req, res, next) => {
-		try {
-			const { id } = req.loggedUser;
-			const user = await prisma.users.findUnique({ where: { id: +id } });
-			if (user) {
-				res.status(200).json(user);
-			} else {
-				next({ name: "ErrorNotFound" });
-			}
-		} catch (err) {
-			next(err);
-		}
-	};
+    try {
+      const { id } = req.loggedUser;
+      const user = await prisma.users.findUnique({
+        where: { id: +id },
+        include: {
+          campaigns: {
+            include: {
+              banner: true
+            }
+          },
+        }
+      });
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        next({ name: "ErrorNotFound" });
+      }
+    } catch (err) {
+      next(err);
+    }
+  };
 
 }
 
