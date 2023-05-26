@@ -10,6 +10,7 @@ async function main() {
 			email: "kocak@example.com",
 			password: await bcrypt.hash("test123", 10),
 			role: "user",
+			biography: "Maecenas ultricies vulputate ante, nec facilisis orci tempor at. Nullam orci tortor, maximus eget magna id, rutrum tempor nibh. Aenean euismod lectus a urna viverra porttitor. Morbi blandit turpis magna, ut molestie nisl lacinia a. Curabitur sagittis lectus nec malesuada pulvinar. In dictum ultrices neque sit amet faucibus. Morbi mi odio, lacinia vel porttitor vel, porttitor at ex. Morbi id rhoncus augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut interdum ipsum mauris, vitae pharetra orci aliquam non.",
 		},
 	});
 
@@ -19,6 +20,7 @@ async function main() {
 			email: "lucu@example.com",
 			password: await bcrypt.hash("test123", 10),
 			role: "user",
+			biography: "Maecenas ultricies vulputate ante, nec facilisis orci tempor at. Nullam orci tortor, maximus eget magna id, rutrum tempor nibh. Aenean euismod lectus a urna viverra porttitor. Morbi blandit turpis magna, ut molestie nisl lacinia a. Curabitur sagittis lectus nec malesuada pulvinar. In dictum ultrices neque sit amet faucibus. Morbi mi odio, lacinia vel porttitor vel, porttitor at ex. Morbi id rhoncus augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut interdum ipsum mauris, vitae pharetra orci aliquam non.",
 		},
 	});
 
@@ -28,6 +30,7 @@ async function main() {
 			email: "hehe@example.com",
 			password: await bcrypt.hash("test123", 10),
 			role: "user",
+			biography: "Maecenas ultricies vulputate ante, nec facilisis orci tempor at. Nullam orci tortor, maximus eget magna id, rutrum tempor nibh. Aenean euismod lectus a urna viverra porttitor. Morbi blandit turpis magna, ut molestie nisl lacinia a. Curabitur sagittis lectus nec malesuada pulvinar. In dictum ultrices neque sit amet faucibus. Morbi mi odio, lacinia vel porttitor vel, porttitor at ex. Morbi id rhoncus augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut interdum ipsum mauris, vitae pharetra orci aliquam non.",
 		},
 	});
 
