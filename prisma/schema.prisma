@@ -18,6 +18,7 @@ model users {
   password     String
   role         String        @default("USER")
   biography    String        @default("")
+  avatar       String        @default("")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   campaigns    campaign[]

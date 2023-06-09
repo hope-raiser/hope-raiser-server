@@ -6,6 +6,7 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'USER',
     "biography" TEXT NOT NULL DEFAULT '',
+    "avatar" TEXT NOT NULL DEFAULT '',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

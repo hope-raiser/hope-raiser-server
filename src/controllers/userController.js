@@ -40,7 +40,7 @@ class UserController {
       );
       return res
         .status(200)
-        .json({ token, email, name: user.name, id: user.id });
+        .json({ token, email, name: user.name, id: user.id , avatar: user.avatar});
     } catch (err) {
       next(err);
       res.status(401).json({ message: "Invalid credentials" });
@@ -141,11 +141,29 @@ class UserController {
         where: { id: +id },
         data: {
           name: name,
-          biography: biography,
+          biography: biography
         },
       });
       res.status(200).json({
-        message: "Successfully updated profile",
+        message: "Successfully Updated User"
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  static updateAvatar = async (req, res, next) => {
+    try {
+      const avatar = req.file.path;
+      const { id } = req.loggedUser
+      const updatedUser = await prisma.users.update({
+        where: { id: +id },
+        data: {
+          avatar:`http://localhost:3001/${avatar}`
+        },
+      });
+      res.status(200).json({
+        message: "Successfully Updated User"
       });
     } catch (err) {
       next(err);
