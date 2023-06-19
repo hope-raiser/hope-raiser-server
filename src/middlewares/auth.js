@@ -15,7 +15,8 @@ async function authentication(req, res, next) {
 				req.loggedUser = {
 					id: user.id,
 					email: user.email,
-					role: user.role
+					role: user.role,
+					avatar: user.avatar
 				};
 				next();
 			}

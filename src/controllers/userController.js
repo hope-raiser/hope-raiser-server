@@ -133,37 +133,41 @@ class UserController {
     }
   };
 
+
   static updateUser = async (req, res, next) => {
     try {
-      const { id } = req.loggedUser
+      const { id } = req.loggedUser;
       const { name, biography } = req.body;
-      const updatedUser = await prisma.users.update({
-        where: { id: +id },
-        data: {
-          name: name,
-          biography: biography
-        },
-      });
+      let fileName = "";
+  
+      if (req.file === undefined) {
+        const existingUser = await prisma.users.findUnique({
+          where: { id: +id },
+        });
+        fileName = existingUser.avatar;
+  
+        const updatedUser = await prisma.users.update({
+          where: { id: +id },
+          data: {
+            name: name,
+            biography: biography,
+          },
+        });
+      } else {
+        const avatar = req.file.path;
+        fileName = `http://localhost:3001/${avatar}`;
+  
+        const updatedUser = await prisma.users.update({
+          where: { id: +id },
+          data: {
+            name: name,
+            biography: biography,
+            avatar: fileName,
+          },
+        });
+      }
       res.status(200).json({
-        message: "Successfully Updated User"
-      });
-    } catch (err) {
-      next(err);
-    }
-  };
-
-  static updateAvatar = async (req, res, next) => {
-    try {
-      const avatar = req.file.path;
-      const { id } = req.loggedUser
-      const updatedUser = await prisma.users.update({
-        where: { id: +id },
-        data: {
-          avatar:`http://localhost:3001/${avatar}`
-        },
-      });
-      res.status(200).json({
-        message: "Successfully Updated User"
+        message: "Successfully Updated User",
       });
     } catch (err) {
       next(err);
